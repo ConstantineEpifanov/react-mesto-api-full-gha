@@ -13,7 +13,7 @@ class Auth {
   }
 
   register({ email, password }) {
-    return this._request(this._baseUrl + "/signup", {
+    return this._request(this._baseUrl + "signup", {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
@@ -24,7 +24,7 @@ class Auth {
   }
 
   login({ email, password }) {
-    return this._request(this._baseUrl + "/signin", {
+    return this._request(this._baseUrl + "signin", {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify({
@@ -35,7 +35,7 @@ class Auth {
   }
 
   checkToken(token) {
-    return this._request(this._baseUrl + "/users/me", {
+    return this._request(this._baseUrl + "users/me", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -46,10 +46,9 @@ class Auth {
 }
 
 const auth = new Auth({
-  baseUrl: "https://auth.nomoreparties.co",
+  baseUrl: "https://api.mesto.constantine.nomoredomains.rocks/",
   headers: {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
+    "Content-Type": "application/json"
   },
 });
 
