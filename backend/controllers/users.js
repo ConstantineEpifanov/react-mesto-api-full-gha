@@ -21,7 +21,7 @@ const getUser = (req, res, next) => {
       if (!user) {
         return next(new NotFoundError('Пользователь не найден'));
       }
-      return res.send({ data: user });
+      return res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -34,7 +34,7 @@ const getUser = (req, res, next) => {
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Переданы некорректные данные'));
@@ -91,7 +91,7 @@ const updateProfile = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return next(new NotFoundError('Пользователь не найден'));
@@ -112,7 +112,7 @@ const updateAvatar = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
         return next(new NotFoundError('Пользователь не найден'));
