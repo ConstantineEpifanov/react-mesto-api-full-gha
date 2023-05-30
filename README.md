@@ -9,8 +9,8 @@
 
 ## Ссылки на проект
 
-IP-адрес 51.250.67.45
+IP 51.250.67.45
 
- [Frontend](https://mesto.constantine.nomoredomains.rocks/)
+Frontend https://mesto.constantine.nomoredomains.rocks/
 
- [Backend](https://mesto.constantine.nomoredomains.rocks/)
+Backend https://api.mesto.constantine.nomoredomains.rocks/
