@@ -44,7 +44,9 @@ function App() {
         setLoggedIn(true);
         navigate("/", { replace: true });
       })
-      .catch(console.log);
+      .catch(() => {
+        setFailPopupOpen(true);
+      });
   }
 
   function handleRegister({ email, password }) {
@@ -69,7 +71,7 @@ function App() {
       auth
         .checkToken(token)
         .then((res) => {
-          setEmail(res.data.email);
+          setEmail(res.email);
           setLoggedIn(true);
           navigate("/", { replace: true });
         })
@@ -82,7 +84,7 @@ function App() {
       Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userInfo, cardData]) => {
           setCurrentUser(userInfo);
-          setCards(cardData);
+          setCards(cardData).reverse();
         })
         .catch(console.log);
     }
