@@ -38,8 +38,9 @@ class Auth {
     return this._request(this._baseUrl + "users/me", {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization" : `Bearer ${token}`
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
     } ,
     });
   }

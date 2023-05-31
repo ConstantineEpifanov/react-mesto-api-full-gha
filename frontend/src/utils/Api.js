@@ -38,9 +38,6 @@ class Api {
     });
   }
 
-
-
-  
   patchUserInfo({ name, about }) {
     return this._request(this._baseUrl + `users/me`, {
       method: "PATCH",
@@ -87,9 +84,9 @@ class Api {
 const api = new Api({
   baseUrl: "https://api.mesto.constantine.nomoredomains.rocks/",
   headers: {
-    authorization: `Bearer ${localStorage.getItem('token')}`,
+    authorization: `Bearer ${localStorage.getItem("token")}`,
     "Content-Type": "application/json",
   },
 });
 
-export {api}
+export { api };

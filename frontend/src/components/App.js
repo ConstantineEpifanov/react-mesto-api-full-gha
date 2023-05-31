@@ -23,8 +23,9 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({});
 
-  const [isSuccessPopupOpen, setSuccessPopupOpen] = useState(false);
-  const [isFailPopupOpen, setFailPopupOpen] = useState(false);
+  const [isInfoToolTipOpen, setInfoToolTipOpen] = useState(false);
+  const [isInfoSuccess, setInfoSuccess] = useState(false);
+  const [isInfoTooltipMessage, setInfoTooltipMessage] = useState("");
 
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -40,12 +41,23 @@ function App() {
       .login({ email, password })
       .then((data) => {
         localStorage.setItem("token", data.token);
-        setEmail(email);
+        // Object.defineProperty(api, '_headers', {
+        //   value: {
+        //     authorization: `Bearer ${localStorage.getItem("token")}`,
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+        api._headers = {
+              authorization: `Bearer ${localStorage.getItem("token")}`,
+              "Content-Type": "application/json",
+            }
         setLoggedIn(true);
+        setEmail(email);
         navigate("/", { replace: true });
       })
       .catch(() => {
-        setFailPopupOpen(true);
+        setInfoSuccess(false);
+        handleToolTip(`Что-то пошло не так! Попробуйте ещё раз.`);
       });
   }
 
@@ -53,11 +65,18 @@ function App() {
     auth
       .register({ email, password })
       .then(() => {
-        setSuccessPopupOpen(true);
+        handleToolTip(`Вы успешно зарегистрировались!`);
+        setInfoSuccess(true);
+        navigate("/sign-in", { replace: true });
       })
       .catch(() => {
-        setFailPopupOpen(true);
+        handleToolTip(`Что-то пошло не так! Попробуйте ещё раз.`);
       });
+  }
+
+  function handleToolTip(message) {
+    setInfoTooltipMessage(message);
+    setInfoToolTipOpen(true);
   }
 
   function handleSignout() {
@@ -65,9 +84,11 @@ function App() {
     localStorage.removeItem("token");
   }
 
+
+
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      let token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
+    if (token) {
       auth
         .checkToken(token)
         .then((res) => {
@@ -96,8 +117,7 @@ function App() {
     setAddPlacePopupOpen(false);
     setEditAvatarPopupOpen(false);
     setSelectedCard({});
-    setSuccessPopupOpen(false);
-    setFailPopupOpen(false);
+    setInfoToolTipOpen(false);
   }
 
   function handleEditAvatarClick() {
@@ -182,10 +202,9 @@ function App() {
         <Header email={email} onLogOut={handleSignout} />
         <Routes>
           <Route
-            path="/"
+            path='/'
             element={
               <ProtectedRoute
-              
                 loggedIn={loggedIn}
                 component={Main}
                 onEditProfile={handleEditProfileClick}
@@ -200,10 +219,10 @@ function App() {
             }
           />
           <Route
-            path="/sign-up"
+            path='/sign-up'
             element={<Register onRegister={handleRegister} />}
           />
-          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
+          <Route path='/sign-in' element={<Login onLogin={handleLogin} />} />
         </Routes>
         <Footer />
 
@@ -220,9 +239,9 @@ function App() {
         />
 
         <PopupWithForm
-          name="submit"
-          title="Вы уверены?"
-          submitButtonText="Да"></PopupWithForm>
+          name='submit'
+          title='Вы уверены?'
+          submitButtonText='Да'></PopupWithForm>
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
@@ -233,19 +252,10 @@ function App() {
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
 
         <InfoTooltip
-          isOpen={isSuccessPopupOpen}
-          onClose={() => {
-            closeAllPopups();
-            navigate("/", { replace: true });
-          }}
-          isAccept={true}
-          infoText="Вы успешно зарегистрировались!"
-        />
-        <InfoTooltip
-          isOpen={isFailPopupOpen}
+          isOpen={isInfoToolTipOpen}
+          infoText={isInfoTooltipMessage}
+          isSuccess={isInfoSuccess}
           onClose={closeAllPopups}
-          isAccept={false}
-          infoText="Что-то пошло не так! Попробуйте ещё раз."
         />
       </CurrentUserContext.Provider>
     </>
